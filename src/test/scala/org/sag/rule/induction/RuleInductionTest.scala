@@ -26,9 +26,9 @@ class RuleInductionTest extends FlatSpec with Matchers with BeforeAndAfterAll {
   "master" should "finish processing" in {
     new TestKit(nodes(0)) with ImplicitSender {
       def run {
-        //val master = system.actorSelection("/user/master")
-        //master ! ...
-        //expectMsg(10 seconds, ...)
+        val master = system.actorSelection("/user/master")
+        master ! StartProcessing()
+        expectMsg(10 seconds, ProcessingFinished())
       }
     }.run
   }

@@ -14,7 +14,7 @@ object ClusterStartup {
   def run(workersCount : Int) : Array[ActorSystem] = {
     val seedUrl = Context.getConfig.getStringList("akka.cluster.seed-nodes").get(0)
     val seedPort = seedUrl.substring(seedUrl.lastIndexOf(':') + 1).toInt
-    val seed = MasterNode.start(seedPort) // master
+    val seed = TestMasterNode.start(seedPort) // master
 
     Thread.sleep(1000)
 
