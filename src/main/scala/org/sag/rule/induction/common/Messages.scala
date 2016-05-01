@@ -1,13 +1,19 @@
 package org.sag.rule.induction.common
 
+import java.util.Date
+
+import org.sag.rule.induction.algorithm.Itemset
+
 /**
  * @author Cezary Pawlowski
  */
 object Messages {
   trait Message {}
 
-  case class Data(itemset: List[Long]) extends Message
+  case class Data(ids: List[Long]) extends Message
 
-  case class GetSupport(item: Long) extends Message
-  case class SetSupport(item: Long, support: Long) extends Message
+  case class GetSupport(itemset: Itemset, start: Date, stop: Date) extends Message
+  case class SetSupport(itemset: Itemset, start: Date, stop: Date, support: Long, itemsetsCount: Long) extends Message
+
+  case class RulesGenerationTrigger()
 }

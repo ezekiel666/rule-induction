@@ -15,6 +15,7 @@ class Settings(config: Config) {
   val streamingRandomShift = config.getInt("rule-induction.streaming.random-shift")
 
   val timeWindow = config.getInt("rule-induction.time-window")
+  val computationDelay = config.getDouble("rule-induction.computation-delay")
 
   val minSupportMode = config.getString("rule-induction.min-support.mode")
   val absoluteMinSupport = config.getInt("rule-induction.min-support.absolute")
@@ -32,6 +33,7 @@ class Settings(config: Config) {
     println(s"streaming.random-shift=$streamingRandomShift")
 
     println(s"time-window=$timeWindow")
+    println(s"computation-delay=$computationDelay")
 
     println(s"min-support.mode=$minSupportMode")
     println(s"min-support.absolute=$absoluteMinSupport")

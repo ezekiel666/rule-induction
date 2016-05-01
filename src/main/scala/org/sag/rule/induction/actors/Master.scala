@@ -15,7 +15,6 @@ import scala.util.Random
  * @author Cezary Pawlowski
  */
 class Master extends Actor with ActorLogging {
-  private val cluster = Cluster(context.system)
   private val workerRouter = context.actorOf(FromConfig.props(), name = "workerRouter")
 
   private implicit val executor = ExecutionContext.global
