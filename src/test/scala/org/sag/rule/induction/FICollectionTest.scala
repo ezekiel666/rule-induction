@@ -16,7 +16,7 @@ class FICollectionTest extends FlatSpec with Matchers {
   "fi collection" should "work" in {
     val itemsets = List(Itemset(List(1, 2)), Itemset(List(1, 2, 3)), Itemset(List(1, 2, 3)), Itemset(List(1, 3)), Itemset(List(1, 3)))
     val minSupp = 2
-    val fi = new FICollection(itemsets, minSupp)
-    fi.show()
+    val fiCollection = new FICollection(itemsets, minSupp)
+    fiCollection.show()
   }
 }

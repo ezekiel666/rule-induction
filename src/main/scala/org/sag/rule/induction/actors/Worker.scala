@@ -5,7 +5,7 @@ import java.util.Date
 import akka.actor.{Actor, ActorLogging}
 import org.joda.time.DateTime
 import org.sag.rule.induction.Context
-import org.sag.rule.induction.algorithm.{FICollection, Itemset}
+import org.sag.rule.induction.algorithm.{RuleInduction, FICollection, Itemset}
 import org.sag.rule.induction.common.Messages._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,7 +44,7 @@ class Worker extends Actor with ActorLogging {
       val start = new DateTime(stop).minusMillis(s.timeWindow).toDate
       val itemsets = sequence.filterKeys(d => d.after(start) && d.before(stop)).map(_._2).toList
       Future {
-        apriori(itemsets, start, stop)
+        generateRules(itemsets, start, stop)
       }
 
     case other =>
@@ -74,17 +74,24 @@ class Worker extends Actor with ActorLogging {
     }
   }
 
-  def apriori(itemsets: List[Itemset], start: Date, stop: Date): Unit = {
+  def generateRules(itemsets: List[Itemset], start: Date, stop: Date): Unit = {
     log.info(s"apriori [itemsets=$itemsets, start=$start, stop=$stop]")
 
     //import akka.cluster.Cluster
     //val cluster = Cluster(context.system)
     //val workers = cluster.state.members.filter(m => m.hasRole("worker"))
     //context.actorSelection("akka.tcp://ClusterSystem@" + n + "/user/acceptor")
-    // TODO
+    // TODO: support polling
 
     val minSupp = calculateMinSupport(itemsets.size)
-    val fi = new FICollection(itemsets, minSupp)
-    fi.show()
+    val fiCollection = new FICollection(itemsets, minSupp)
+
+    val minConf = Context.getSettings.minConfidence
+    val rules = new RuleInduction(fiCollection, minSupp, minConf)
+
+    //println(s"[itemsets=$itemsets]")
+    //println(s"[start=$start, stop=$stop]")
+    //fiCollection.show()
+    //rules.show()
   }
 }

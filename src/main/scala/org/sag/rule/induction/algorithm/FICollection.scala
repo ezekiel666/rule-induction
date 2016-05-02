@@ -7,7 +7,7 @@ import scala.collection.mutable
  * @author Cezary Pawlowski
  */
 class FICollection(itemsets: List[Itemset], minSupp: Int) {
-  private val fi = new mutable.ArrayBuffer[immutable.Map[Itemset, Int]]
+  val fi = new mutable.ArrayBuffer[immutable.Map[Itemset, Int]]
   generate()
 
   private def generate(): Unit = {
@@ -82,12 +82,20 @@ class FICollection(itemsets: List[Itemset], minSupp: Int) {
   }
 
   def show(): Unit = {
-    println("frequent itemsets:")
+    println(s"frequent itemsets [minSupp=$minSupp]:")
     for(f <- fi) {
       for((k, v) <- f) {
         print(k.ids.mkString(" "))
         println(s" ($v)")
       }
     }
+  }
+
+  def getItemsetsCount(): Int = {
+    itemsets.size
+  }
+
+  def getSupport(itemset: Itemset): Int = {
+    fi(itemset.ids.size).get(itemset).get
   }
 }

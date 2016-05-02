@@ -1,35 +1,23 @@
 package org.sag.rule.induction
 
 import akka.event.slf4j.Logger
-import akka.testkit.{ImplicitSender, TestKit}
-import org.scalatest.{BeforeAndAfterAll, Matchers, FlatSpec}
-import scala.concurrent.duration._
+import org.sag.rule.induction.algorithm.{FICollection, Itemset}
+import org.scalatest.{FlatSpec, Matchers}
 
 /**
  * @author Cezary Pawlowski
  */
-class RuleInductionTest extends FlatSpec with Matchers with BeforeAndAfterAll {
+class RuleInductionTest extends FlatSpec with Matchers {
   val log = Logger("RuleInductionTest")
-  val nodes = ClusterStartup.run(3)
-  log.info("all nodes are up")
 
-  override protected def beforeAll() = {
-    Thread.sleep(2000)
-  }
+  "rule induction" should "work" in {
+    /*
+    val itemsets = List(Itemset(List(1, 2)), Itemset(List(1, 2, 3)), Itemset(List(1, 2, 3)), Itemset(List(1, 3)), Itemset(List(1, 3)))
+    val minSupp = 2
+    val fiCollection = new FICollection(itemsets, minSupp)
+    fiCollection.show()
+    */
 
-  override protected def afterAll {
-    nodes foreach { n =>
-      TestKit.shutdownActorSystem(n)
-    }
-  }
-
-  "master" should "finish processing" in {
-    new TestKit(nodes(0)) with ImplicitSender {
-      def run {
-        val master = system.actorSelection("/user/master")
-        master ! StartProcessing()
-        expectMsg(10 seconds, ProcessingFinished())
-      }
-    }.run
+    // TODO
   }
 }
