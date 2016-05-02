@@ -9,7 +9,7 @@ import scala.concurrent.duration._
  * @author Cezary Pawlowski
  */
 class MasterTest extends FlatSpec with Matchers with BeforeAndAfterAll {
-  val log = Logger("RuleInductionTest")
+  val log = Logger("MasterTest")
   val nodes = ClusterStartup.run(3)
   log.info("all nodes are up")
 

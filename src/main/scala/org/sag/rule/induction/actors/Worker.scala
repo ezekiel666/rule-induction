@@ -89,9 +89,9 @@ class Worker extends Actor with ActorLogging {
     val minConf = Context.getSettings.minConfidence
     val rules = new RuleInduction(fiCollection, minSupp, minConf)
 
-    //println(s"[itemsets=$itemsets]")
-    //println(s"[start=$start, stop=$stop]")
-    //fiCollection.show()
-    //rules.show()
+    println(s"[itemsets=$itemsets]")
+    println(s"[start=$start, stop=$stop]")
+    fiCollection.show()
+    rules.show()
   }
 }

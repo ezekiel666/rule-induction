@@ -11,8 +11,16 @@ class FICollection(itemsets: List[Itemset], minSupp: Int) {
   generate()
 
   private def generate(): Unit = {
+    generate0()
     generate1()
     while(generateNext()) {}
+  }
+
+  private def generate0(): Unit = {
+    val itemset = Itemset(List.empty[Long])
+    val support = itemsets.size
+    val f = immutable.Map[Itemset, Int]((itemset, support))
+    fi += f
   }
 
   private def generate1(): Unit = {
@@ -57,12 +65,12 @@ class FICollection(itemsets: List[Itemset], minSupp: Int) {
   }
 
   private def check(it1: Itemset, it2: Itemset): Boolean = {
-    val n = it1.ids.size - 1
+    val n = it1.size - 1
     0 until n forall(i => it1.ids(i) == it2.ids(i))
   }
 
   private def join(it1: Itemset, it2: Itemset): Itemset = {
-    val n = it1.ids.size - 1
+    val n = it1.size - 1
     val ids = it1.ids.take(n) ::: List(it1.ids.last, it2.ids.last).sorted
     Itemset(ids)
   }
@@ -83,8 +91,9 @@ class FICollection(itemsets: List[Itemset], minSupp: Int) {
 
   def show(): Unit = {
     println(s"frequent itemsets [minSupp=$minSupp]:")
-    for(f <- fi) {
-      for((k, v) <- f) {
+    println(s"X (sup)")
+    fi foreach { f =>
+      f foreach { case (k, v) =>
         print(k.ids.mkString(" "))
         println(s" ($v)")
       }
@@ -96,6 +105,6 @@ class FICollection(itemsets: List[Itemset], minSupp: Int) {
   }
 
   def getSupport(itemset: Itemset): Int = {
-    fi(itemset.ids.size).get(itemset).get
+    fi(itemset.size).get(itemset).get
   }
 }

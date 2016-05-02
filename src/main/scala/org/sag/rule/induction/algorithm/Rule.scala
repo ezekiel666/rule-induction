@@ -3,20 +3,27 @@ package org.sag.rule.induction.algorithm
 /**
  * @author Cezary Pawlowski
  */
-class Rule(base: (Itemset, Int), predecessor: (Itemset, Int), successor: (Itemset, Int), itemsetsCount: Int) {
+class Rule(base: IS, predecessor: IS, successor: IS, itemsetsCount: Int) {
   private def px(): Double = {
-    predecessor._2 / itemsetsCount.toDouble
+    predecessor.support / itemsetsCount.toDouble
   }
 
   private def py(): Double = {
-    successor._2 / itemsetsCount.toDouble
+    successor.support / itemsetsCount.toDouble
   }
 
   private def pxy(): Double = {
-    base._2 / itemsetsCount.toDouble
+    base.support / itemsetsCount.toDouble
   }
 
   def conf(): Double = {
     pxy() / px()
+  }
+
+  def show(): Unit = {
+    print(predecessor.itemset.ids.mkString(" "))
+    print(" -> ")
+    print(successor.itemset.ids.mkString(" "))
+    println(s" (${base.support}, ${predecessor.support}, ${successor.support}, ${conf()})")
   }
 }
