@@ -5,7 +5,7 @@ import java.util.Date
 import akka.actor.{Actor, ActorLogging}
 import org.joda.time.DateTime
 import org.sag.rule.induction.Context
-import org.sag.rule.induction.algorithm.Itemset
+import org.sag.rule.induction.algorithm.{FICollection, Itemset}
 import org.sag.rule.induction.common.Messages._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -21,14 +21,10 @@ import scala.collection.mutable
 class Worker extends Actor with ActorLogging {
   val sequence = mutable.Map[Date, Itemset]()
 
-  val dt = getInterval()
-  context.system.scheduler.schedule(dt millis, dt millis) {
-    self ! RulesGenerationTrigger()
-  }
-
   override def receive: Receive = {
     case Data(ids) =>
       log.info(s"Data($ids) from $sender")
+      if(sequence.isEmpty) { schedule() }
       sequence.put(new Date(), Itemset(ids))
 
     case GetSupport(itemset, start, stop) =>
@@ -55,12 +51,19 @@ class Worker extends Actor with ActorLogging {
       log.warning(s"unknown message $other from $sender")
   }
 
+  def schedule(): Unit = {
+    val dt = getInterval()
+    context.system.scheduler.schedule(dt millis, dt millis) {
+      self ! RulesGenerationTrigger()
+    }
+  }
+
   def getInterval(): Int = {
     val s = Context.getSettings
     (s.computationDelay * s.timeWindow).toInt
   }
 
-  def calculateMinSupport(itemsetsCount: Long): Int = {
+  def calculateMinSupport(itemsetsCount: Int): Int = {
     val s = Context.getSettings
 
     s.minSupportMode match {
@@ -72,11 +75,16 @@ class Worker extends Actor with ActorLogging {
   }
 
   def apriori(itemsets: List[Itemset], start: Date, stop: Date): Unit = {
+    log.info(s"apriori [itemsets=$itemsets, start=$start, stop=$stop]")
+
     //import akka.cluster.Cluster
     //val cluster = Cluster(context.system)
     //val workers = cluster.state.members.filter(m => m.hasRole("worker"))
     //context.actorSelection("akka.tcp://ClusterSystem@" + n + "/user/acceptor")
     // TODO
-    log.info("apriori")
+
+    val minSupp = calculateMinSupport(itemsets.size)
+    val fi = new FICollection(itemsets, minSupp)
+    fi.show()
   }
 }
