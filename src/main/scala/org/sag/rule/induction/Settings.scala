@@ -23,6 +23,8 @@ class Settings(config: Config) {
 
   val minConfidence = config.getDouble("rule-induction.min-confidence")
 
+  val supportPollMargin = config.getDouble("rule-induction.support-poll-margin")
+
   def print(): Unit = {
     println(s"rule-induction settings:")
 
@@ -40,6 +42,8 @@ class Settings(config: Config) {
     println(s"min-support.relative=$relativeMinSupport")
 
     println(s"min-confidence=$minConfidence")
+
+    println(s"support-poll-margin=$supportPollMargin")
   }
 
   def getActorSystemName: String = {

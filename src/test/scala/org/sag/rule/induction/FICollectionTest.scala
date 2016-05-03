@@ -1,11 +1,10 @@
 package org.sag.rule.induction
 
-import akka.event.slf4j.Logger
-import akka.testkit.{ImplicitSender, TestKit}
-import org.sag.rule.induction.algorithm.{Itemset, FICollection}
-import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
+import java.util.Date
 
-import scala.concurrent.duration._
+import akka.event.slf4j.Logger
+import org.sag.rule.induction.algorithm.{Itemset, FICollection}
+import org.scalatest.{FlatSpec, Matchers}
 
 /**
  * @author Cezary Pawlowski
@@ -15,8 +14,7 @@ class FICollectionTest extends FlatSpec with Matchers {
 
   "fi collection" should "work" in {
     val itemsets = List(Itemset(List(1, 2)), Itemset(List(1, 2, 3)), Itemset(List(1, 2, 3)), Itemset(List(1, 3)), Itemset(List(1, 3)))
-    val minSupp = 2
-    val fiCollection = new FICollection(itemsets, minSupp)
+    val fiCollection = new FICollection(itemsets, new Date(), new Date(), Set())
     fiCollection.show()
   }
 }

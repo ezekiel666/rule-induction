@@ -8,5 +8,5 @@ case class Itemset(ids: List[Long]) {
     itemset.ids.forall(id => ids.contains(id))
   }
 
-  def size: Int = ids.size
+  def size = ids.size
 }

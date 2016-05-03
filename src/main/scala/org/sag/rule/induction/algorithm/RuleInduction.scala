@@ -1,31 +1,37 @@
 package org.sag.rule.induction.algorithm
 
+import org.sag.rule.induction.Context
+
 import scala.collection.{mutable}
 
 /**
  * @author Cezary Pawlowski
  */
-class RuleInduction(fiCollection: FICollection, minSupp: Int, minConf: Double) {
+class RuleInduction(fiCollection: FICollection) {
+  private val minConf = Context.getSettings.minConfidence
   private val rules = new mutable.ArrayBuffer[Rule]
+
   generate()
 
   private def generate(): Unit = {
-    fiCollection.fi.reverse foreach { f =>
+    fiCollection.getFrequentItemsets.reverse foreach { f =>
       f foreach {
-        case (itemset, support) => generate(IS(itemset, support))
+        case (itemset, support) =>
+          val itemsetsCount = fiCollection.getItemsetsCount(itemset)
+          val tuple = ItemsetTuple(itemset, support, itemsetsCount)
+          generate(tuple)
       }
     }
   }
 
-  private def generate(is: IS): Unit = {
-    0 to is.itemset.size foreach { i =>
-      getSubsets(is.itemset, i) foreach { successor =>
-        val predecessor = substract(is.itemset, successor.itemset)
+  private def generate(itemsetTuple: ItemsetTuple): Unit = {
+    0 to itemsetTuple.itemset.size foreach { i =>
+      getSubsets(itemsetTuple.itemset, i) foreach { successor =>
+        val predecessor = substract(itemsetTuple.itemset, successor.itemset)
         val rule = new Rule(
-          is,
+          itemsetTuple,
           predecessor,
-          successor,
-          fiCollection.getItemsetsCount()
+          successor
         )
 
         if(rule.conf() >= minConf) {
@@ -35,13 +41,13 @@ class RuleInduction(fiCollection: FICollection, minSupp: Int, minConf: Double) {
     }
   }
 
-  private def getSubsets(itemset: Itemset, n: Int): List[IS] = {
-    val v = new mutable.ArrayBuffer[IS]
+  private def getSubsets(itemset: Itemset, n: Int): List[ItemsetTuple] = {
+    val v = new mutable.ArrayBuffer[ItemsetTuple]
 
     if(n == 0) {
-      val empty = fiCollection.fi(0).head
-      empty match { case (itemset, support) =>
-        v += IS(itemset, support)
+      fiCollection.empty match { case (itemset, support) =>
+        val itemsetsCount = fiCollection.getItemsetsCount(itemset)
+        v += ItemsetTuple(itemset, support, itemsetsCount)
       }
       return v.toList
     }
@@ -50,11 +56,12 @@ class RuleInduction(fiCollection: FICollection, minSupp: Int, minConf: Double) {
     v.toList
   }
 
-  private def getSubsetsImpl(v: mutable.ArrayBuffer[IS], i: List[Long], t: List[Long], n: Int): Unit = {
+  private def getSubsetsImpl(v: mutable.ArrayBuffer[ItemsetTuple], i: List[Long], t: List[Long], n: Int): Unit = {
     if(n == 0) {
       val itemset = Itemset(t)
       val support = fiCollection.getSupport(itemset)
-      v += IS(itemset, support)
+      val itemsetsCount = fiCollection.getItemsetsCount(itemset)
+      v += ItemsetTuple(itemset, support, itemsetsCount)
       return
     }
 
@@ -64,20 +71,21 @@ class RuleInduction(fiCollection: FICollection, minSupp: Int, minConf: Double) {
     }
   }
 
-  private def substract(lhs: Itemset, rhs: Itemset): IS = {
+  private def substract(lhs: Itemset, rhs: Itemset): ItemsetTuple = {
     val ids = lhs.ids filter {
       id => !rhs.ids.contains(id)
     }
 
-    val it = Itemset(ids)
-    val supp = fiCollection.getSupport(it)
+    val itemset = Itemset(ids)
+    val support = fiCollection.getSupport(itemset)
+    val itemsetsCount = fiCollection.getItemsetsCount(itemset)
 
-    IS(it, supp)
+    ItemsetTuple(itemset, support, itemsetsCount)
   }
 
   def show(): Unit = {
-    println(s"rules [minSupp=$minSupp, minConf=$minConf]:")
-    println("X -> Y (sup_XY, sup_X, sup_Y, conf)")
+    println(s"rules:")
+    println("X -> Y (sup_XY, sup_X, sup_Y, ic_XY, ic_X, ic_Y, conf)")
     rules.foreach(_.show())
   }
 }

@@ -2,11 +2,12 @@ package org.sag.rule.induction.actors
 
 import java.util.Date
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{ExtendedActorSystem, Actor, ActorLogging}
 import org.joda.time.DateTime
 import org.sag.rule.induction.Context
 import org.sag.rule.induction.algorithm.{RuleInduction, FICollection, Itemset}
 import org.sag.rule.induction.common.Messages._
+import org.sag.rule.induction.common.Util
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -14,6 +15,7 @@ import scala.concurrent.duration._
 
 import scala.collection.mutable
 
+import akka.cluster.Cluster
 
 /**
  * @author Cezary Pawlowski
@@ -52,42 +54,25 @@ class Worker extends Actor with ActorLogging {
   }
 
   def schedule(): Unit = {
-    val dt = getInterval()
+    val dt = Util.getInterval()
     context.system.scheduler.schedule(dt millis, dt millis) {
       self ! RulesGenerationTrigger()
-    }
-  }
-
-  def getInterval(): Int = {
-    val s = Context.getSettings
-    (s.computationDelay * s.timeWindow).toInt
-  }
-
-  def calculateMinSupport(itemsetsCount: Int): Int = {
-    val s = Context.getSettings
-
-    s.minSupportMode match {
-      case "absolute" =>
-        s.absoluteMinSupport
-      case "relative" =>
-        (s.relativeMinSupport * itemsetsCount).toInt
     }
   }
 
   def generateRules(itemsets: List[Itemset], start: Date, stop: Date): Unit = {
     log.info(s"apriori [itemsets=$itemsets, start=$start, stop=$stop]")
 
-    //import akka.cluster.Cluster
-    //val cluster = Cluster(context.system)
-    //val workers = cluster.state.members.filter(m => m.hasRole("worker"))
-    //context.actorSelection("akka.tcp://ClusterSystem@" + n + "/user/acceptor")
-    // TODO: support polling
+    val selfAddress = context.system.asInstanceOf[ExtendedActorSystem].provider.getDefaultAddress
+    val workers = Cluster(context.system).state.members.filter(m => m.hasRole("worker") && m.address != selfAddress) map { w =>
+      context.actorSelection(w.address + "/user/worker")
+    }
 
-    val minSupp = calculateMinSupport(itemsets.size)
-    val fiCollection = new FICollection(itemsets, minSupp)
+    //log.info(s"selfAddress=${selfAddress}")
+    //log.info(s"workers=${workers}")
 
-    val minConf = Context.getSettings.minConfidence
-    val rules = new RuleInduction(fiCollection, minSupp, minConf)
+    val fiCollection = new FICollection(itemsets, start, stop, workers)
+    val rules = new RuleInduction(fiCollection)
 
     println(s"[itemsets=$itemsets]")
     println(s"[start=$start, stop=$stop]")

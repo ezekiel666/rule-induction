@@ -1,13 +1,21 @@
 package org.sag.rule.induction.algorithm
 
+import java.util.Date
+
+import akka.actor.ActorSelection
+import org.sag.rule.induction.common.Util
+
 import scala.collection.immutable
 import scala.collection.mutable
 
 /**
  * @author Cezary Pawlowski
  */
-class FICollection(itemsets: List[Itemset], minSupp: Int) {
-  val fi = new mutable.ArrayBuffer[immutable.Map[Itemset, Int]]
+class FICollection(itemsets: List[Itemset], start: Date, stop: Date, workers: Set[ActorSelection]) {
+  private val minSupp = Util.calculateMinSupport(itemsets.size)
+  private val fi = new mutable.ArrayBuffer[immutable.Map[Itemset, Int]]
+  private val ic = mutable.Map[Itemset, Int]() // contains itemsets count, when different than default
+
   generate()
 
   private def generate(): Unit = {
@@ -90,18 +98,25 @@ class FICollection(itemsets: List[Itemset], minSupp: Int) {
   }
 
   def show(): Unit = {
-    println(s"frequent itemsets [minSupp=$minSupp]:")
-    println(s"X (sup)")
+    println(s"frequent itemsets:")
+    println(s"X (sup, ic)")
     fi foreach { f =>
-      f foreach { case (k, v) =>
-        print(k.ids.mkString(" "))
-        println(s" ($v)")
+      f foreach { case (itemset, support) =>
+        print(itemset.ids.mkString(" "))
+        println(s" ($support, ${getItemsetsCount(itemset)})")
       }
     }
   }
 
-  def getItemsetsCount(): Int = {
-    itemsets.size
+  def getFrequentItemsets = fi
+
+  def empty = fi(0).head
+
+  def getItemsetsCount(itemset: Itemset): Int = {
+    ic.get(itemset) match {
+      case Some(ic) => ic
+      case None => itemsets.size
+    }
   }
 
   def getSupport(itemset: Itemset): Int = {
