@@ -155,7 +155,7 @@ class FICollection(itemsets: List[Itemset], start: Date, stop: Date, workers: Se
   }
 
   def show(): Unit = {
-    println(s"frequent itemsets:")
+    println(s"frequent itemsets [start=$start, stop=$stop]:")
     println(s"X (sup, ic) [minSupp]")
     fi foreach { f =>
       f foreach { case (itemset, stats) =>
