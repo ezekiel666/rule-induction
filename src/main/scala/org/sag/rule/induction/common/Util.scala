@@ -21,4 +21,9 @@ object Util {
         (s.relativeMinSupport * itemsetsCount).toInt
     }
   }
+
+  def getSupportPollLimit(minSupp: Int): Int = {
+    val s = Context.getSettings
+    ((1 - s.supportPollMargin) * minSupp).toInt
+  }
 }

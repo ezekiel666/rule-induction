@@ -13,7 +13,7 @@ object Messages {
   case class Data(ids: List[Long]) extends Message
 
   case class GetSupport(itemset: Itemset, start: Date, stop: Date) extends Message
-  case class SetSupport(itemset: Itemset, start: Date, stop: Date, support: Long, itemsetsCount: Long) extends Message
+  case class SetSupport(itemset: Itemset, start: Date, stop: Date, support: Int, itemsetsCount: Int) extends Message
 
   case class RulesGenerationTrigger()
 }

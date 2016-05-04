@@ -1,7 +1,6 @@
 package org.sag.rule.induction.actors
 
 import akka.actor.{Actor, ActorLogging}
-import akka.cluster.Cluster
 import akka.routing.FromConfig
 import org.sag.rule.induction.Context
 import org.sag.rule.induction.common.CmdConsole

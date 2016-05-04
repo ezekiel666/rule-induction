@@ -35,10 +35,6 @@ class Worker extends Actor with ActorLogging {
       val support = itemsets.filter(_.contains(itemset)).size
       sender ! SetSupport(itemset, start, stop, support, itemsets.size)
 
-    case SetSupport(itemset, start, stop, support, itemsetsCount) =>
-      log.info(s"SetSupport($itemset, $start, $stop, $support, $itemsetsCount) from $sender")
-      // TODO
-
     case RulesGenerationTrigger() =>
       log.info(s"RulesGenerationTrigger() from $sender")
       val s = Context.getSettings

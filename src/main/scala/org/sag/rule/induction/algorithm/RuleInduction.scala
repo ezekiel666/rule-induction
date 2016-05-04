@@ -16,9 +16,8 @@ class RuleInduction(fiCollection: FICollection) {
   private def generate(): Unit = {
     fiCollection.getFrequentItemsets.reverse foreach { f =>
       f foreach {
-        case (itemset, support) =>
-          val itemsetsCount = fiCollection.getItemsetsCount(itemset)
-          val tuple = ItemsetTuple(itemset, support, itemsetsCount)
+        case (itemset, stats) =>
+          val tuple = ItemsetTuple(itemset, stats.support, stats.itemsetsCount)
           generate(tuple)
       }
     }
@@ -45,9 +44,8 @@ class RuleInduction(fiCollection: FICollection) {
     val v = new mutable.ArrayBuffer[ItemsetTuple]
 
     if(n == 0) {
-      fiCollection.empty match { case (itemset, support) =>
-        val itemsetsCount = fiCollection.getItemsetsCount(itemset)
-        v += ItemsetTuple(itemset, support, itemsetsCount)
+      fiCollection.empty match { case (itemset, stats) =>
+        v += ItemsetTuple(itemset, stats.support, stats.itemsetsCount)
       }
       return v.toList
     }
@@ -59,9 +57,8 @@ class RuleInduction(fiCollection: FICollection) {
   private def getSubsetsImpl(v: mutable.ArrayBuffer[ItemsetTuple], i: List[Long], t: List[Long], n: Int): Unit = {
     if(n == 0) {
       val itemset = Itemset(t)
-      val support = fiCollection.getSupport(itemset)
-      val itemsetsCount = fiCollection.getItemsetsCount(itemset)
-      v += ItemsetTuple(itemset, support, itemsetsCount)
+      val stats = fiCollection.getStats(itemset)
+      v += ItemsetTuple(itemset, stats.support, stats.itemsetsCount)
       return
     }
 
@@ -77,14 +74,12 @@ class RuleInduction(fiCollection: FICollection) {
     }
 
     val itemset = Itemset(ids)
-    val support = fiCollection.getSupport(itemset)
-    val itemsetsCount = fiCollection.getItemsetsCount(itemset)
-
-    ItemsetTuple(itemset, support, itemsetsCount)
+    val stats = fiCollection.getStats(itemset)
+    ItemsetTuple(itemset, stats.support, stats.itemsetsCount)
   }
 
   def show(): Unit = {
-    println(s"rules:")
+    println(s"rules [minConf=$minConf]:")
     println("X -> Y (sup_XY, sup_X, sup_Y, ic_XY, ic_X, ic_Y, conf)")
     rules.foreach(_.show())
   }
