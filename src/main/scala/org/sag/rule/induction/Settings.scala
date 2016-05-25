@@ -3,7 +3,7 @@ package org.sag.rule.induction
 import com.typesafe.config.{ConfigFactory, Config}
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class Settings(config: Config) {
   config.checkValid(ConfigFactory.parseResources("application.conf"), "rule-induction")

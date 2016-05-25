@@ -8,7 +8,7 @@ import org.sag.rule.induction.actors.Master
 import scala.reflect.ClassTag
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 abstract class AbstractMasterNode[T <: Master : ClassTag] {
   def start(port: Int): ActorSystem = {

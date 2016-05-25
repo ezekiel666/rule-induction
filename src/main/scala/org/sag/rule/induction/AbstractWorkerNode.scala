@@ -7,7 +7,7 @@ import org.sag.rule.induction.actors.Worker
 import scala.reflect.ClassTag
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 abstract class AbstractWorkerNode[T <: Worker : ClassTag] {
   def start(port: Int): ActorSystem = {

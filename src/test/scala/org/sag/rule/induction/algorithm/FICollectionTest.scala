@@ -8,7 +8,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import org.slf4j.LoggerFactory
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class FICollectionTest extends FlatSpec with Matchers {
   val log = LoggerFactory.getLogger(classOf[FICollectionTest])
@@ -33,7 +33,7 @@ class FICollectionTest extends FlatSpec with Matchers {
 // test dependencies
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class TestWorker extends Actor with ActorLogging {
   override def receive: Receive = {

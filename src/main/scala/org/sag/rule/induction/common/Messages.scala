@@ -5,7 +5,7 @@ import java.util.Date
 import org.sag.rule.induction.algorithm.Itemset
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 object Messages {
   trait Message {}

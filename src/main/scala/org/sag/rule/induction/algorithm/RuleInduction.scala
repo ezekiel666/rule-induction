@@ -5,7 +5,7 @@ import org.sag.rule.induction.Context
 import scala.collection.{mutable}
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class RuleInduction(fiCollection: FICollection) {
   private val minConf = Context.getSettings.minConfidence

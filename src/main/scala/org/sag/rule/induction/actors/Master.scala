@@ -11,7 +11,7 @@ import scala.io.Source
 import scala.util.Random
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class Master extends Actor with ActorLogging {
   private val workerRouter = context.actorOf(FromConfig.props(), name = "workerRouter")

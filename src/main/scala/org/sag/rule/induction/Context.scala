@@ -3,7 +3,7 @@ package org.sag.rule.induction
 import com.typesafe.config.{ConfigFactory, Config}
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class Context(val config: Config) {
   val settings = new Settings(config)
@@ -14,7 +14,7 @@ class Context(val config: Config) {
 }
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 object Context {
   private var context = new Context()

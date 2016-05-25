@@ -4,7 +4,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import org.slf4j.LoggerFactory
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class SettingsTest extends FlatSpec with Matchers {
   val log = LoggerFactory.getLogger(classOf[SettingsTest])

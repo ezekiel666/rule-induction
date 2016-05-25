@@ -18,7 +18,7 @@ import scala.collection.mutable
 import akka.cluster.Cluster
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class Worker extends Actor with ActorLogging {
   val sequence = mutable.Map[Date, Itemset]()

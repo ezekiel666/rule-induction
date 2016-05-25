@@ -3,7 +3,7 @@ package org.sag.rule.induction.common
 import org.sag.rule.induction.Context
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 object Util {
   def getInterval(): Int = {

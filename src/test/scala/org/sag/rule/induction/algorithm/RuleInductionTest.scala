@@ -6,7 +6,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import org.slf4j.LoggerFactory
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class RuleInductionTest extends FlatSpec with Matchers {
   val log = LoggerFactory.getLogger(classOf[RuleInductionTest])

@@ -1,7 +1,7 @@
 package org.sag.rule.induction.algorithm
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class Rule(base: ItemsetTuple, predecessor: ItemsetTuple, successor: ItemsetTuple) {
   private def px(): Double = {

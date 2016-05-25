@@ -3,7 +3,7 @@ package org.sag.rule.induction
 import org.sag.rule.induction.actors.Master
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 object MasterNode extends AbstractMasterNode[Master] {
   def main(args: Array[String]): Unit = {

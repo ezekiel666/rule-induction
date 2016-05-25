@@ -3,7 +3,7 @@ package org.sag.rule.induction
 import org.sag.rule.induction.actors.Worker
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 object WorkerNode extends AbstractWorkerNode[Worker] {
   def main(args: Array[String]): Unit = {

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class MasterTest extends FlatSpec with Matchers with BeforeAndAfterAll {
   val log = LoggerFactory.getLogger(classOf[MasterTest])
@@ -41,17 +41,17 @@ class MasterTest extends FlatSpec with Matchers with BeforeAndAfterAll {
 // test dependencies
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 case class StartProcessing()
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 case class ProcessingFinished()
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class TestMaster extends Master {
   override def preStart(): Unit = ()
@@ -70,12 +70,12 @@ class TestMaster extends Master {
 }
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 object TestMasterNode extends AbstractMasterNode[TestMaster] {}
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 object ClusterStartup {
   def run(workersCount : Int) : Array[ActorSystem] = {

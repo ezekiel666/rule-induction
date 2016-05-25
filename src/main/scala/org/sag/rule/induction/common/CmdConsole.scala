@@ -3,7 +3,7 @@ package org.sag.rule.induction.common
 import scala.io.StdIn
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 object CmdConsole {
   def getCmd(): Cmd = {

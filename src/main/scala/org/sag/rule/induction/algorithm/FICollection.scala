@@ -17,7 +17,7 @@ import akka.pattern.{AskTimeoutException, ask}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
- * @author Cezary Pawlowski
+ * @author Cezary Pawlowski, Maciej Korpalski
  */
 class FICollection(itemsets: List[Itemset], start: Date, stop: Date, workers: Set[ActorSelection]) {
   private val log = LoggerFactory.getLogger(classOf[FICollection])
