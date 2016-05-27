@@ -42,7 +42,11 @@ class Worker extends Actor with ActorLogging {
       val start = new DateTime(stop).minusMillis(s.timeWindow).toDate
       val itemsets = sequence.filterKeys(d => d.after(start) && d.before(stop)).map(_._2).toList
       Future {
-        generateRules(itemsets, start, stop)
+        try {
+          generateRules(itemsets, start, stop)
+        } catch {
+          case ex: Exception => log.error(ex.getMessage)
+        }
       }
 
     case other =>

@@ -57,17 +57,19 @@ class FICollection(itemsets: List[Itemset], start: Date, stop: Date, workers: Se
         }
       }
 
-      val future = Future.reduce(futures) {
-        case ((s1,i1), (s2,i2)) =>
-          (s1 + s2, i1 + i2)
-      }
+      if(!futures.isEmpty) {
+        val future = Future.reduce(futures) {
+          case ((s1, i1), (s2, i2)) =>
+            (s1 + s2, i1 + i2)
+        }
 
-      val result = Await.result(future, Duration.Inf)
+        val result = Await.result(future, Duration.Inf)
 
-      result match {
-        case (support, itemsetsCount) =>
-          stats.support += support
-          stats.itemsetsCount += itemsetsCount
+        result match {
+          case (support, itemsetsCount) =>
+            stats.support += support
+            stats.itemsetsCount += itemsetsCount
+        }
       }
     }
   }
